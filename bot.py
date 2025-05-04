@@ -17,7 +17,7 @@ router = Router()
 async def start_handler(message: Message):
     await message.answer("Привет! Отправь мне УЗИ изображение, и я его проанализирую.")
 
-@router.message(content_types=["photo"])
+@router.message(lambda m: m.photo)
 async def handle_photo(message: Message):
     photo = message.photo[-1]
     file = await bot.get_file(photo.file_id)
@@ -46,3 +46,6 @@ if __name__ == "__main__":
         await dp.start_polling(bot)
 
     asyncio.run(run())
+
+
+---
