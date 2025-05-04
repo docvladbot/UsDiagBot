@@ -9,7 +9,7 @@ from aiogram import Router
 from PIL import Image
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
+bot = Bot(token=BOT_TOKEN)  # parse_mode удалён для aiogram >=3.7
 dp = Dispatcher(storage=MemoryStorage())
 router = Router()
 
@@ -46,3 +46,6 @@ if __name__ == "__main__":
         await dp.start_polling(bot)
 
     asyncio.run(run())
+
+
+---
