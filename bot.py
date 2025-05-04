@@ -6,7 +6,6 @@ from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
 from aiogram import Router
-from aiogram import executor
 from PIL import Image
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
