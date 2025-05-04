@@ -46,6 +46,3 @@ if __name__ == "__main__":
         await dp.start_polling(bot)
 
     asyncio.run(run())
-
-
----
