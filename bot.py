@@ -9,11 +9,11 @@ from aiogram import Router
 from PIL import Image
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-bot = Bot(token=BOT_TOKEN)  # parse_mode удалён для aiogram >=3.7
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 router = Router()
 
-@router.message(commands={"start", "help"})
+@router.message(lambda m: m.text in ["/start", "/help"])
 async def start_handler(message: Message):
     await message.answer("Привет! Отправь мне УЗИ изображение, и я его проанализирую.")
 
