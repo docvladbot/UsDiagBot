@@ -1,4 +1,4 @@
-
+Python
 import os
 import logging
 from aiogram import Bot, Dispatcher, types
@@ -46,6 +46,3 @@ if __name__ == "__main__":
         await dp.start_polling(bot)
 
     asyncio.run(run())
-
-
----
