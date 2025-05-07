@@ -61,3 +61,32 @@ def create_app():
 
 if __name__ == "__main__":
     web.run_app(create_app(), host="0.0.0.0", port=int(os.getenv("PORT", 10000)))
+Чтобы интегрировать модели FetalNet и FetalCLIP в вашего Telegram-бота с использованием 
+
+pip install torch torchvision
+git clone https://github.com/SanoScience/FetalNet.git
+  git clone
+from PIL import Image
+  from torchvision import transforms
+
+  image = Image.open("path_to_image.jpg")
+  preprocess = transforms.Compose([
+      transforms.Resize(256),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+  ])
+  input_tensor = preprocess(image).unsqueeze(0)
+
+
+
+ 
+
+
+import torchvision.io as io
+
+  video, _, _ 
+
+
+
+---
+
