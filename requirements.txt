@@ -1,5 +1,5 @@
-aiogram==3.4.1
+aiogram
 aiohttp
-pillow
+Pillow
 torch
 torchvision
