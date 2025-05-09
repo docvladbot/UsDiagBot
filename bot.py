@@ -1,56 +1,65 @@
-
 import os
 import logging
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, Router, types
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message
-from aiogram.utils import executor
 from PIL import Image
-import torch
-import torchvision.transforms as transforms
-from fetalnet.models import FetalNet
-from fetalclip.model import FetalCLIP
 from aiohttp import web
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+
+import torch
+from torchvision import transforms
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_URL = os.getenv("RENDER_EXTERNAL_URL", "") + WEBHOOK_PATH
+
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher(bot)
-model_fetalnet = FetalNet()
-model_fetalclip = FetalCLIP()
+dp = Dispatcher(storage=MemoryStorage())
+router = Router()
+dp.include_router(router)
 
-model_fetalnet.eval()
-model_fetalclip.eval()
+@router.message(lambda m: m.text in ["/start", "/help"])
+async def start_handler(message: Message):
+    await message.answer("Привет! Отправь мне УЗИ изображение, и я его обработаю.")
 
-@dp.message_handler(commands=["start", "help"])
-async def start(message: Message):
-    await message.answer("Привет! Отправь мне УЗИ изображение, и я его проанализирую.")
-
-@dp.message_handler(content_types=["photo"])
+@router.message(lambda m: m.photo)
 async def handle_photo(message: Message):
     photo = message.photo[-1]
     file = await bot.get_file(photo.file_id)
     file_path = file.file_path
     file_bytes = await bot.download_file(file_path)
-
-    image_path = f"temp_{message.from_user.id}.jpg"
-    with open(image_path, "wb") as f:
+    
+    filename = f"temp_{message.from_user.id}.jpg"
+    with open(filename, "wb") as f:
         f.write(file_bytes.read())
 
-    img = Image.open(image_path).convert("RGB")
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-    ])
-    tensor = transform(img).unsqueeze(0)
+    img = Image.open(filename)
+    width, height = img.size
+    os.remove(filename)
 
-    with torch.no_grad():
-        fetalnet_output = model_fetalnet(tensor)
-        fetalclip_output = model_fetalclip(tensor)
+    await message.answer(f"Изображение получено. Размер: {width}x{height} пикселей.")
 
-    prediction = fetalnet_output.argmax().item()
-    description = f"FetalNet предсказал класс: {prediction}"
+    # Placeholder for FetalNet / FetalCLIP processing
+    await message.answer("Анализ изображения выполняется... (модель пока не подключена)")
 
-    os.remove(image_path)
-    await message.answer(description)
+@router.message()
+async def fallback(message: Message):
+    await message.answer("Пожалуйста, отправьте изображение УЗИ.")
+
+async def on_startup(app: web.Application):
+    await bot.set_webhook(WEBHOOK_URL)
+
+async def on_shutdown(app: web.Application):
+    await bot.delete_webhook()
+
+def create_app():
+    app = web.Application()
+    SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=WEBHOOK_PATH)
+    app.on_startup.append(on_startup)
+    app.on_shutdown.append(on_shutdown)
+    return app
 
 if __name__ == "__main__":
-    executor.start_polling(dp)
+    web.run_app(create_app(), host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
