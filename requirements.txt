@@ -1,4 +1,7 @@
+git+https://github.com/SanoScience/FetalNet.git
+git+https://github.com/SanoScience/FetalCLIP.git
 aiogram
-pillow
+aiohttp
+Pillow
 torch
 torchvision
