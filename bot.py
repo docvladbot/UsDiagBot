@@ -1,7 +1,5 @@
 from models.fetalnet import FetalNet
 from models.fetalclip import FetalCLIP
 
-if __name__ == "__main__":
-    model1 = FetalNet()
-    model2 = FetalCLIP()
-    print("Модели успешно загружены.")
+# Демонстрационный код запуска
+print("Модель FetalNet и FetalCLIP успешно импортированы.")
