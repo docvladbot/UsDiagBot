@@ -1,0 +1,6 @@
+aiohttp
+aiofiles
+aiogram
+pillow
+torch
+torchvision
