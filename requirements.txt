@@ -1,5 +1,2 @@
-aiogram
-aiohttp
-Pillow
 torch
 torchvision
