@@ -1,7 +1,3 @@
-
 class FetalCLIP:
-    def __init__(self):
-        pass
-
-    def predict(self, image_tensor):
-        return "FetalCLIP: Предсказание не реализовано"
+    def predict(self, image_path):
+        return "FetalCLIP: Условный диагноз по изображению"

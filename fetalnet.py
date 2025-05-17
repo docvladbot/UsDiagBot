@@ -1,10 +1,3 @@
-
-import torch.nn as nn
-
-class FetalNet(nn.Module):
-    def __init__(self):
-        super(FetalNet, self).__init__()
-        self.dummy = nn.Identity()
-
-    def forward(self, x):
-        return self.dummy(x)
+class FetalNet:
+    def predict(self, image_path):
+        return "FetalNet: Условный диагноз по изображению"
