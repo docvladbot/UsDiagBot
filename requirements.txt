@@ -3,5 +3,5 @@ torchvision
 torchaudio
 opencv-python
 python-telegram-bot==13.7
-fetalnet
-fetalclip
+
+
